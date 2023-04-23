@@ -19,7 +19,8 @@ export class loadingScene extends Scene {
             this.bg = this.add.image(game.width / 2, game.height / 2, "baseGameBG")
             this.bgContainer && this.bgContainer.add(this.bg);
         });
-        this.load.image("baseGameFG", '/Images/backgroundFreespins.jpg')
+        this.load.image("baseGameFG", '/Images/backgroundFreespins.jpg');
+        this.load.atlas("basic", 'sprites/frameI.png', 'sprites/frameI.json');
         this.load.atlas("reelSurround", 'sprites/frameII.png', 'sprites/frameII.json');
         this.load.atlas("panel", 'sprites/frameIII.png', 'sprites/frameIII.json');
         this.load.atlas("symbols", 'sprites/SymbolStatic.png', 'sprites/SymbolStatic.json');
