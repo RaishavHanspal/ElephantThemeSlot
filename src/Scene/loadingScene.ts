@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { game } from "../PositionData/config";
 
 export class loadingScene extends Scene {
     progressBar: Phaser.GameObjects.Rectangle;
@@ -15,7 +16,7 @@ export class loadingScene extends Scene {
         this.startLoadingProgress();
         this.load.setBaseURL('./Assets');
         this.load.image("baseGameBG", '/Images/backgroundBasegame.jpg').on('complete', () => {
-            this.bg = this.add.image(640, 360, "baseGameBG")
+            this.bg = this.add.image(game.width / 2, game.height / 2, "baseGameBG")
             this.bgContainer && this.bgContainer.add(this.bg);
         });
         this.load.image("baseGameFG", '/Images/backgroundFreespins.jpg')
@@ -28,13 +29,13 @@ export class loadingScene extends Scene {
     /** starts the loading process with preload */
     private startLoadingProgress(): void {
         this.bgContainer = this.add.container(0, 0);
-        this.progressBar = this.add.rectangle(190, 280, 0, 30, 0xff00ff, 1);
-        this.progressBox = this.add.rectangle(630, 280, 900, 50, 0x222222, 0.8);
+        this.progressBar = this.add.rectangle(game.width / 2 - 450, game.height / 2 - 80, 0, 30, 0xff00ff, 1);
+        this.progressBox = this.add.rectangle(game.width / 2 - 10, game.height / 2 - 80, 900, 50, 0x222222, 0.8);
         this.progressBox.setOrigin(0.5);
         // Adds loading percentage text
         this.loadingText = this.make.text({
-            x: 640,
-            y: 355,
+            x: game.width / 2,
+            y: game.height / 2 - 5,
             text: '0%',
             style: {
                 font: '30px Arial',

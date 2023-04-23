@@ -4,6 +4,7 @@ export interface IReelProperties{
 }
 
 export interface IReelConfig{
+    symbolLayering: string[];
     requestAnimationFrame: boolean;
     repetitions: number;
     spinSpeed: number;
