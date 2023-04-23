@@ -2,11 +2,14 @@ import { GameObjects, Utils } from "phaser";
 import { EventConstants } from "../Constants/Events";
 import { IReelConfig } from "../interface";
 import { EventUtils } from "../Utilities/EventUtils";
+import { serverModel } from "../Server/serverModel";
+import { TimeUtils } from "../Utilities/TimeUtils";
 
 export class Reel extends GameObjects.Container {
     private repeatitions: number = 0;
     private isSpinning: boolean = false;
     private symLayeringArray: any[] = [];
+    private startStoppingReel: boolean = false;
     constructor(scene: Phaser.Scene, x?: number, y?: number, children?: GameObjects.GameObject[], private id?: number, private readonly reelsConfig?: IReelConfig) {
         super(scene, x, y, children);
         this.setStoppedReel();
@@ -15,17 +18,20 @@ export class Reel extends GameObjects.Container {
     public setStoppedReel(): void {
         this.removeAll();
         this.removeAllListeners();
-        const symbolArray: unknown[] = this.getRandomReel();
+        const symbolArray: any[] = this.getReelPositions();
         symbolArray.forEach((symbolId: number, index) => {
-            this.add(this.newSymbol(0, (index - 1) * (this.reelsConfig.symbolHeight + this.reelsConfig.symbolGap), this.reelsConfig.symbolMap[symbolId]));
+            this.add(this.newSymbol(symbolId, index));
         });
     }
 
-    public getRandomReel(): unknown[] {
-        return Utils.Array.Shuffle(Array.apply(null, new Array(this.reelsConfig.symbolMap.length - 1)).map((id: number,i: number) => i)).slice(1, this.reelsConfig.symbolCount + 2);
+    public getReelPositions(): any[] {
+        return ((window as any).slotServerModel as serverModel).getStoppingReel()[this.id];
     }
 
-    private newSymbol(x: number, y: number, frameName: string) {
+    private newSymbol(symbolId: number, index: number) {
+        const x: number = 0;
+        const y = (index - 1) * (this.reelsConfig.symbolHeight + this.reelsConfig.symbolGap)
+        const frameName: string = this.reelsConfig.symbolMap[symbolId];
         let _newSymbol: GameObjects.Sprite | GameObjects.Image;
         switch (this.reelsConfig.symbolImportType) {
             case "sprite": {
@@ -51,13 +57,22 @@ export class Reel extends GameObjects.Container {
 
     public onSymbolShifted(): void {
         this.y = 0;
-        this.repeatitions++;
+        if (this.startStoppingReel) {
+            this.repeatitions++;
+        }
         this.getAll().forEach((symbol: GameObjects.Image) => {
             if (symbol.y < ((this.reelsConfig.symbolCount - 1) * (this.reelsConfig.symbolHeight + this.reelsConfig.symbolGap))) {
                 symbol.y += (this.reelsConfig.symbolHeight + this.reelsConfig.symbolGap);
             }
             else {
                 symbol.y = - (this.reelsConfig.symbolHeight + this.reelsConfig.symbolGap);
+                if ((this.reelsConfig.repetitions - this.repeatitions) <= this.reelsConfig.symbolCount) {
+                    const newSymbolId: number = this.getReelPositions()[(this.reelsConfig.repetitions - this.repeatitions)];
+                    const _newSymbol = this.newSymbol(newSymbolId, this.reelsConfig.repetitions - this.repeatitions);
+                    this.add(_newSymbol);
+                    _newSymbol.setPosition(symbol.x, symbol.y);
+                    symbol.destroy();
+                }
             }
         });
     }
@@ -65,17 +80,24 @@ export class Reel extends GameObjects.Container {
     public spin() {
         this.repeatitions = 0;
         this.isSpinning = true;
-        this.scene.tweens.add({
-            targets: this,
-            alpha: this.reelsConfig.spinBlurAlpha || 0.5,
-            duration: this.reelsConfig.spinSpeed || 100,
-        });
-        if (this.reelsConfig.requestAnimationFrame) {
-            this.RAFSpin();
-        }
-        else {
-            this.tweenSpin();
-        }
+        this.startStoppingReel = false;
+        TimeUtils.setTimeOut(this.reelsConfig.spinDelay * this.id, this.scene, () => {
+            this.scene.tweens.add({
+                targets: this,
+                alpha: this.reelsConfig.spinBlurAlpha || 0.5,
+                duration: this.reelsConfig.spinSpeed || 100,
+            });
+            if (this.reelsConfig.requestAnimationFrame) {
+                this.RAFSpin();
+            }
+            else {
+                this.tweenSpin();
+            }
+        }, this);
+    }
+
+    public stop() {
+        this.startStoppingReel = true;
     }
 
     /** enable reel spinning using tween */

@@ -15,7 +15,8 @@ export class loadingScene extends Scene {
     public preload() {
         this.startLoadingProgress();
         this.load.setBaseURL('./Assets');
-        this.load.image("baseGameBG", '/Images/backgroundBasegame.jpg').on('complete', () => {
+        this.load.image("baseGameBG", '/Images/backgroundBasegame.jpg')
+        this.load.on('filecomplete-image-baseGameBG', (key: string, type: any, data: any) => {
             this.bg = this.add.image(game.width / 2, game.height / 2, "baseGameBG")
             this.bgContainer && this.bgContainer.add(this.bg);
         });

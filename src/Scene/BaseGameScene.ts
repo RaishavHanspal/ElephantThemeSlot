@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { bgReels, game } from "../PositionData/config";
 import { ReelsController } from "../Reel/ReelsController";
+import { FlowLogic } from "../FlowLogic/FlowLogic";
 
 export class BaseGameScene extends Scene{
     private reelsController: ReelsController;
@@ -19,6 +20,7 @@ export class BaseGameScene extends Scene{
         this.add.sprite(game.width / 2, 67, "basic", "logo");
         const reelConfig: any = bgReels;
         this.reelsController = new ReelsController(this, reelConfig);
+        new FlowLogic();
         this.initializeButtons();
     }
 

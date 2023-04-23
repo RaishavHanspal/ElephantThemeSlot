@@ -23,6 +23,7 @@ export class ReelsController {
         /** workaround to add window click event */
         // addEventListener("click", this.spin.bind(this));
         EventUtils.subscribe(EventConstants.onReelStopped, this.onReelStopped, this);
+        EventUtils.subscribe(EventConstants.startStoppingReels, this.startStoppingReels, this);
         this.scene.input.enabled = true;
         this.scene.input.addListener("pointerup", this.spin, this);
     }
@@ -45,9 +46,8 @@ export class ReelsController {
             })
         }
         this.spinButton ? this.spinButton.removeInteractive() : this.scene.input.enabled = false;
-        this.reelGroup.reels.forEach((reel: Reel, index) => {
-            TimeUtils.setTimeOut(this.reelsConfig.spinDelay * index, this.scene, reel.spin, reel);
-        })
+        this.reelGroup.reels.forEach((reel: Reel) => reel.spin());
+        EventUtils.emit(EventConstants.spinClicked, null);
     }
 
     /** when the each reel stops and lands this fn is called */
@@ -69,5 +69,9 @@ export class ReelsController {
             }
             console.log("All Reels Stopped!");
         }
+    }
+
+    private startStoppingReels(): void{
+        this.reelGroup.reels.forEach((reel: Reel) => reel.stop());
     }
 }

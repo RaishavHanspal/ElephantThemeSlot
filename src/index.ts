@@ -2,6 +2,9 @@ import { slotGame } from "./Game";
 import { game } from "./PositionData/config";
 import { BaseGameScene } from "./Scene/BaseGameScene";
 import { loadingScene } from "./Scene/loadingScene";
+import { dummyServer } from "./Server/dummyServer";
+import { serverCommunication } from "./Server/serverCommunication";
+import { serverModel } from "./Server/serverModel";
 
 const slotConfig = {
     /** to use WEBGL or canvas wherever applicable */
@@ -22,5 +25,8 @@ const slotConfig = {
         height: game.height,
     }
 };
-
+new dummyServer();
+const slotServerModel = new serverModel();
+(window as any).slotServerModel = slotServerModel;
+new serverCommunication(slotServerModel);
 new slotGame(slotConfig);
