@@ -22,9 +22,11 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: github-pages
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
-        path: dist
+        with: 
+          path: dist
+          name: github-pages
       - name: Deploy GitHub Pages site
         uses: actions/deploy-pages@v2.0.1
         with:
