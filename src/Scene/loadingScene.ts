@@ -4,7 +4,7 @@ export class loadingScene extends Scene {
     progressBar: Phaser.GameObjects.Rectangle;
     progressBox: Phaser.GameObjects.Rectangle;
     loadingText: Phaser.GameObjects.Text;
-    bg: Phaser.GameObjects.Sprite;
+    bg: Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
     bgContainer: Phaser.GameObjects.Container;
     constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
         super(config);
@@ -14,19 +14,15 @@ export class loadingScene extends Scene {
     public preload() {
         this.startLoadingProgress();
         this.load.setBaseURL('./Assets');
-        this.load.atlas("bgMenu", 'Images/BackGrounds/bgmenu.png', 'Images/BackGrounds/bgmenu.json').on('complete', () => {
-            this.bg = this.add.sprite(0, 0, "bgMenu", "bgmenu.png").setScale(2);
+        this.load.image("baseGameBG", '/Images/backgroundBasegame.jpg').on('complete', () => {
+            this.bg = this.add.image(640, 360, "baseGameBG")
             this.bgContainer && this.bgContainer.add(this.bg);
-        }, this)
-        this.load.image('2xBAR', 'Images/Symbols/2xBAR.png');
-        this.load.image('3xBAR', 'Images/Symbols/3xBAR.png');
-        this.load.image('7', 'Images/Symbols/7.png');
-        this.load.image('BAR', 'Images/Symbols/BAR.png');
-        this.load.image('Cherry', 'Images/Symbols/Cherry.png');
-        this.load.image("baseGameBG", 'Images/BackGrounds/baseGameBG.png');
-        this.load.atlas("bg", 'Images/BackGrounds/bg.png', 'Images/BackGrounds/bg.json');
-        this.load.atlas("symbols", 'Images/Symbols/symbols.png', 'Images/Symbols/symbols.json');
-        this.load.atlas("buttons", 'Images/buttons/button.png', 'Images/buttons/button.json');
+        });
+        this.load.image("baseGameFG", '/Images/backgroundFreespins.jpg')
+        this.load.atlas("reelSurround", 'sprites/frameII.png', 'sprites/frameII.json');
+        this.load.atlas("panel", 'sprites/frameIII.png', 'sprites/frameIII.json');
+        this.load.atlas("symbols", 'sprites/SymbolStatic.png', 'sprites/SymbolStatic.json');
+        this.load.atlas("ui", 'sprites/ui.png', 'sprites/ui.json');
     }
 
     /** starts the loading process with preload */
@@ -75,7 +71,7 @@ export class loadingScene extends Scene {
         this.progressBox.destroy();
         this.bg.destroy();
         this.children.removeAll();
-        this.scene.start(Boolean(Math.round(Math.random())) ? "FruitGame" : "BaseGame");
+        this.scene.start("BaseGame");
         this.scene.stop("default");
     }
 }

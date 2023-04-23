@@ -1,6 +1,5 @@
 import { Scene } from "phaser";
-import { reels } from "../PositionData/config";
-import { ReelGroup } from "../Reel/ReelGroup";
+import { bgReels } from "../PositionData/config";
 import { ReelsController } from "../Reel/ReelsController";
 
 export class BaseGameScene extends Scene{
@@ -14,8 +13,8 @@ export class BaseGameScene extends Scene{
 
     /** after the preload is completed this should initialize and align the loaded assets */
     create(){
-        this.add.image(0, 0, "baseGameBG").setScale(2);
-        const reelConfig: any = reels;
+        this.add.image(640, 360, "baseGameBG")
+        const reelConfig: any = bgReels;
         new ReelsController(this, reelConfig);
     }
 }

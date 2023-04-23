@@ -1,7 +1,6 @@
 import { slotGame } from "./Game";
 import { game } from "./PositionData/config";
 import { BaseGameScene } from "./Scene/BaseGameScene";
-import { FruitGameScene } from "./Scene/FruitGameScene";
 import { loadingScene } from "./Scene/loadingScene";
 
 const slotConfig = {
@@ -15,7 +14,7 @@ const slotConfig = {
             gravity: { y: 200 }
         }
     },
-    scene: [loadingScene, BaseGameScene, FruitGameScene],
+    scene: [loadingScene, BaseGameScene],
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,

@@ -48,18 +48,19 @@ module.exports = {
             "Cherry"
         ]
     },
-    fruitReels: {
+    bgReels: {
         requestAnimationFrame: true,
-        symbolWidth: 112,
-        symbolHeight: 94,
+        symbolWidth: 258,
+        symbolHeight: 150,
         symbolCount: 4,
-        x: 344,
-        y: 158,
-        symbolGap: 16,
+        x: 250,
+        y: 121,
+        symbolGap: -5,
         spinDelay: 150,
-        // reelGroupMaskOffsets: {
-        //     y: 16
-        // },
+        reelGroupMaskOffsets: {
+            y: 0,
+            x: 0
+        },
         spinButton: true,
         spinBlurAlpha: 0.4,
         spinSpeed: 100,
@@ -69,34 +70,35 @@ module.exports = {
                 y: 0
             },
             {
-                x: 150,
+                x: 195,
                 y: 0
             },
             {
-                x: 300,
+                x: 390,
                 y: 0
             },
             {
-                x: 450,
+                x: 585,
                 y: 0
             },
             {
-                x: 600,
+                x: 780,
                 y: 0
             }
         ],
         symbolImportType: "sprite",
         symbolMap: [
-            "symbols_0.png",
-            "symbols_1.png",
-            "symbols_2.png",
-            "symbols_3.png",
-            "symbols_4.png",
-            "symbols_5.png",
-            "symbols_6.png",
-            "symbols_7.png",
-            "symbols_8.png",
-            "symbols_9.png",
+            "B01_Static.png",
+            "S01_Static.png",
+            "S02_Static.png",
+            "S03_Static.png",
+            "S04_Static.png",
+            "S05_Static.png",
+            "S06_Static.png",
+            "S07_Static.png",
+            "S08_Static.png",
+            "S09_Static.png",
+            "W01_Static.png"
         ]
     },
     game: {
