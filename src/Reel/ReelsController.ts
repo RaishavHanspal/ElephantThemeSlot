@@ -9,6 +9,7 @@ import { ReelGroup } from "./ReelGroup";
 export class ReelsController {
     private reelGroup: ReelGroup;
     private spinButton: GameObjects.Sprite | GameObjects.Image;
+    private allowReelSpin: boolean = false;
     constructor(private scene: Phaser.Scene, private readonly reelsConfig?: IReelConfig) {
         this.initializeReels();
         this.addhandlers();
@@ -36,6 +37,14 @@ export class ReelsController {
         this.spinButton.on("pointerup", this.spin, this);
     }
 
+    /** move all the reels using update fn */
+    public updateReels(): void{
+        if(!this.allowReelSpin || (this.reelsConfig.spinType !== "SceneUpdate-Phaser")) return;
+        this.reelGroup.reels.forEach((reel: Reel) => {
+            reel.updateSpin();
+        })
+    }
+
     /** all the reels start spinning */
     private spin() {
         if (this.spinButton) {
@@ -45,6 +54,7 @@ export class ReelsController {
                 alpha: this.reelsConfig.spinBlurAlpha
             })
         }
+        this.allowReelSpin = true;
         this.spinButton ? this.spinButton.removeInteractive() : this.scene.input.enabled = false;
         this.reelGroup.reels.forEach((reel: Reel) => reel.spin());
         EventUtils.emit(EventConstants.spinClicked, null);
@@ -55,6 +65,7 @@ export class ReelsController {
         const isLastReel: boolean = reelId === (this.reelsConfig.reelPositions.length - 1);
         if (isLastReel) {
             if (this.reelsConfig.spinButton && this.spinButton) {
+                this.allowReelSpin = false;
                 this.scene.tweens.add({
                     targets: this.spinButton,
                     duration: 100,

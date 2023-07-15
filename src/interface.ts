@@ -4,8 +4,8 @@ export interface IReelProperties{
 }
 
 export interface IReelConfig{
+    spinType: "SceneUpdate-Phaser" | "RequestAnimationFrame" | "Tweens-Phaser";
     symbolLayering: string[];
-    requestAnimationFrame: boolean;
     repetitions: number;
     spinSpeed: number;
     spinBlurAlpha: number;

@@ -4,7 +4,8 @@
     "description": "Use Phaser Js to build a slot game",
     "main": "index.js",
     "scripts": {
-        "build": "npx webpack --config webpack.config.js --env developmemnt"
+        "build": "npx webpack --config webpack.config.js --env developmemnt",
+        "watch": "npx webpack --watch --config webpack.config.js --env developmemnt"
     },
     "keywords": [
         "slot",

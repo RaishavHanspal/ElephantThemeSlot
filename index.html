@@ -9,10 +9,41 @@
         body {
             margin: 0;
         }
+        
+        #background {
+            opacity: 0;
+            transition: opacity 0.5s;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: -1;
+        }
+        
+        #config-panel {
+            position: absolute;
+        }
+        
+        #spin-type {
+            opacity: 0.5;
+            background: #00000000;
+            border: none;
+        }
+        
+        #spin-type::selection {
+            border: none;
+        }
     </style>
 </head>
 
 <body>
+    <div id="background"></div>
+    <div id="config-panel">
+        <select name="spin-type" id="spin-type">
+            <option value="SceneUpdate-Phaser">SceneUpdate-Phaser</option>
+            <option value="RequestAnimationFrame">RequestAnimationFrame</option>
+            <option value="Tweens-Phaser">Tweens-Phaser</option>
+          </select>
+    </div>
     <script src="main.js" defer></script>
 </body>
 

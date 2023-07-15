@@ -19,6 +19,9 @@ export class loadingScene extends Scene {
         this.load.on('filecomplete-image-baseGameBG', (key: string, type: any, data: any) => {
             this.bg = this.add.image(game.width / 2, game.height / 2, "baseGameBG")
             this.bgContainer && this.bgContainer.add(this.bg);
+            const background = document.getElementById("background");
+            background.style.backgroundImage = "url('./Assets/Images/backgroundBasegame.jpg')";
+            background.style.opacity = "1";
         });
         this.load.image("baseGameFG", '/Images/backgroundFreespins.jpg');
         this.load.atlas("basic", 'sprites/frameI.png', 'sprites/frameI.json');
@@ -61,6 +64,15 @@ export class loadingScene extends Scene {
             onComplete: (tween) => {
                 this.progressBox.setInteractive();
                 this.progressBox.on("pointerup", this.onTapToPlayPressed, this);
+                this.make.text({
+                    x: game.width / 2,
+                    y: game.height / 2 - 80,
+                    text: 'Start',
+                    style: {
+                        font: '30px Arial',
+                        color: '#ffffff'
+                    }
+                }).setOrigin(0.5);
             }
         });
     }

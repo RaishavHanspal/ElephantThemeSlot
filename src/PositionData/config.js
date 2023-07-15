@@ -1,6 +1,6 @@
 module.exports = {
     bgReels: {
-        requestAnimationFrame: true,
+        spinType: "SceneUpdate-Phaser", // SceneUpdate-Phaser, RequestAnimationFrame or Tweens-Phaser
         symbolWidth: 258,
         symbolHeight: 150,
         symbolCount: 3,

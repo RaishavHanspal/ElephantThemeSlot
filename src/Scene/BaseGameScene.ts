@@ -36,4 +36,8 @@ export class BaseGameScene extends Scene{
         ]).setName("ButtonConsole");
         this.reelsController.switchToButtonClick(this.add.sprite(game.width / 2, game.height / 2 + 355, "ui", "spinButton.png").setName("spin"));
     }
+
+    public update(time: number, delta: number): void {
+        this.reelsController.updateReels();
+    }
 }

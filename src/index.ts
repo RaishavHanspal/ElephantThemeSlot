@@ -1,4 +1,5 @@
 import { slotGame } from "./Game";
+import * as config from "./PositionData/config";
 import { game } from "./PositionData/config";
 import { BaseGameScene } from "./Scene/BaseGameScene";
 import { loadingScene } from "./Scene/loadingScene";
@@ -25,6 +26,10 @@ const slotConfig = {
         height: game.height,
     }
 };
+const spinTypeDropDown: any = document.getElementById("spin-type");
+spinTypeDropDown.addEventListener("change", (ev:  Event) => {
+    config.bgReels.spinType = spinTypeDropDown.value || config.bgReels.spinType;
+});
 new dummyServer();
 const slotServerModel = new serverModel();
 (window as any).slotServerModel = slotServerModel;

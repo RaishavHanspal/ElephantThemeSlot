@@ -79,16 +79,21 @@ export class Reel extends GameObjects.Container {
 
     public spin() {
         this.repeatitions = 0;
-        this.isSpinning = true;
         this.startStoppingReel = false;
+        if(this.reelsConfig.spinType !== "SceneUpdate-Phaser"){
+            this.isSpinning = true;
+        }
         TimeUtils.setTimeOut(this.reelsConfig.spinDelay * this.id, this.scene, () => {
             this.scene.tweens.add({
                 targets: this,
                 alpha: this.reelsConfig.spinBlurAlpha || 0.5,
                 duration: this.reelsConfig.spinSpeed || 100,
             });
-            if (this.reelsConfig.requestAnimationFrame) {
+            if (this.reelsConfig.spinType === "RequestAnimationFrame") {
                 this.RAFSpin();
+            }
+            else if(this.reelsConfig.spinType === "SceneUpdate-Phaser"){
+                this.isSpinning = true;
             }
             else {
                 this.tweenSpin();
@@ -122,7 +127,19 @@ export class Reel extends GameObjects.Container {
     private RAFSpin(): void {
         if (!this.isSpinning) return;
         requestAnimationFrame(this.RAFSpin.bind(this));
-        this.y += 25;
+        this.y += this.reelsConfig.spinSpeed / 4;
+        if (this.y >= (this.reelsConfig.symbolHeight + this.reelsConfig.symbolGap)) {
+            this.onSymbolShifted();
+            if (this.repeatitions >= this.reelsConfig.repetitions) {
+                this.onReelStopped();
+            }
+        }
+    }
+
+    /** use phaser scene update fn to implement spinning */
+    public updateSpin(): void{
+        if (!this.isSpinning) return;
+        this.y += this.reelsConfig.spinSpeed / 4;
         if (this.y >= (this.reelsConfig.symbolHeight + this.reelsConfig.symbolGap)) {
             this.onSymbolShifted();
             if (this.repeatitions >= this.reelsConfig.repetitions) {
@@ -138,7 +155,7 @@ export class Reel extends GameObjects.Container {
             alpha: 1,
             duration: this.reelsConfig.spinSpeed || 100,
         });
-        console.log("Symbol shifted Count ", this.repeatitions);
+        console.log("Symbol shifted Count", this.repeatitions, "using", this.reelsConfig.spinType);
         this.isSpinning = false;
         EventUtils.emit(EventConstants.onReelStopped, this.id);
     }
